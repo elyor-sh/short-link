@@ -17,12 +17,23 @@ export class LinkService {
         const limit = query.limit || 20
 
         let sort = {}
+        let filter = {}
 
         Object.keys(query).forEach(key => {
-            if(key.includes('sortBy_')){
+            if(key.includes('sortBy_') && (query[key] === -1 || query[key] === 1)){
                 sort = {
                     ...sort,
                     [key.replace('sortBy_', '')]: query[key]
+                }
+            }
+
+            if(key.includes('filterBy_')){
+
+                const isNum = key === 'filterBy_counter'
+
+                filter = {
+                    ...filter,
+                    [key.replace('filterBy_', '')]: isNum ? Number(query[key]) : query[key]
                 }
             }
         })
@@ -31,7 +42,7 @@ export class LinkService {
         const totalPage = Math.ceil(totalCount / limit)
 
         const linkQuery = this.linkRepository
-            .find()
+            .find({...filter})
             .sort({...sort})
             .skip((page < 1 ? 1 : page - 1) * limit)
             .limit(limit < 1 ? 20 : limit)
