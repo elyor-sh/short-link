@@ -3,6 +3,7 @@ import {ITableHeadCells} from "./types";
 import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 import {drawCell} from "./drawCell";
 import {TablePaginationPro} from "./pagination";
+import {TableHeadPro} from "./head";
 
 interface TableProProps {
     headCells: ITableHeadCells[]
@@ -34,12 +35,7 @@ export const TablePro: React.FC<TableProProps> = (
                             {
                                 headCells.map(cell => {
                                     return (
-                                        <TableCell
-                                            key={cell.field}
-                                            align={cell.align || 'left'}
-                                        >
-                                            {cell.title}
-                                        </TableCell>
+                                       <TableHeadPro cell={cell} key={cell.field} />
                                     )
                                 })
                             }
