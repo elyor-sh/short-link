@@ -3,8 +3,7 @@ import {InjectModel} from "@nestjs/mongoose";
 import {Model, ObjectId} from "mongoose";
 import {Link, LinkDocument} from "./link.entity";
 import ShortUniqueId from 'short-unique-id'
-import {LinkSortDto} from "./dto/link.sort.dto";
-import {LinkPaginationDto} from "./dto/link.pagination.dto";
+import {LinkQueryDto} from "./dto/link.query.dto";
 
 @Injectable()
 export class LinkService {
@@ -12,22 +11,19 @@ export class LinkService {
     constructor(@InjectModel('link') private readonly linkRepository: Model<LinkDocument>) {
     }
 
-    async getAll(pagination: LinkPaginationDto) {
+    async getAll(query: LinkQueryDto) {
 
-        const page = pagination.page || 1
-        const limit = pagination.limit || 20
+        const page = query.page || 1
+        const limit = query.limit || 20
 
-        let sort: LinkSortDto = {}
+        let sort = {}
 
-        const sortObj = {...pagination}
-
-        delete sortObj.limit
-        delete sortObj.page
-
-        Object.keys(sortObj).forEach(key => {
-            sort = {
-                ...sort,
-                [key]: sortObj[key]
+        Object.keys(query).forEach(key => {
+            if(key.includes('sortBy_')){
+                sort = {
+                    ...sort,
+                    [key.replace('sortBy_', '')]: query[key]
+                }
             }
         })
 

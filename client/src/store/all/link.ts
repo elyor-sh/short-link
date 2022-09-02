@@ -1,5 +1,6 @@
 import {makeAutoObservable} from "mobx";
 import {LinkEntity} from "../../entities/link.entity";
+import {LinkRequest} from "../../types/request/link.request";
 
 export class LinkStore {
 
@@ -8,6 +9,7 @@ export class LinkStore {
     limit: number = 10
     totalCount: number = 1
     totalPage: number = 1
+    sort: LinkRequest.Sort = {}
 
     constructor() {
         makeAutoObservable(this, {}, {autoBind: true})
@@ -31,5 +33,9 @@ export class LinkStore {
 
     setTotalPage (count: number) {
         this.totalPage = count
+    }
+
+    setSort (sort: LinkRequest.Sort) {
+        this.sort = sort
     }
 }

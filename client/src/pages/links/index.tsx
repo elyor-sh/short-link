@@ -21,7 +21,7 @@ const LinksPage = observer(() => {
         (async () => {
             await linkService.getAll()
         })()
-    }, [linkStore.page, linkStore.limit])
+    }, [linkStore.page, linkStore.limit, linkStore.sort])
 
     return (
         <>

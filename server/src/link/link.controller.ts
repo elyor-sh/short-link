@@ -7,7 +7,7 @@ import {User} from "../user/user.entity";
 import {Response} from "express";
 import {Public} from "../auth/public.decorator";
 import {ApiResponseLinkSwagger} from "../utils/swagger/link.swagger";
-import {LinkPaginationDto} from "./dto/link.pagination.dto";
+import {LinkQueryDto} from "./dto/link.query.dto";
 
 @ApiTags('Ссылки')
 @Controller('squeeze')
@@ -18,9 +18,9 @@ export class LinkController {
     @ApiOperation({summary: 'Получение ссылок'})
     @ApiResponse({status: 200, type: ApiResponseLinkSwagger})
     @Get()
-    getAll(@Query() pagination: LinkPaginationDto) {
+    getAll(@Query() query: LinkQueryDto) {
 
-        return this.linkService.getAll(pagination)
+        return this.linkService.getAll(query)
     }
 
     @ApiOperation({summary: 'Создание ссылок'})
