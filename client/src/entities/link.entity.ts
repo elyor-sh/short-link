@@ -1,6 +1,7 @@
 export interface LinkEntity {
-    id: number
+    _id: string
     short: string
     target: string
     counter: 0
+    owner: string
 }

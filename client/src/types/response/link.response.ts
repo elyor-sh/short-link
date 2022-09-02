@@ -1,3 +1,7 @@
+import {LinkEntity} from "../../entities/link.entity";
+import {PaginationType} from "./base.response";
+
+
 export namespace LinkResponse {
     
     export interface Create {
@@ -5,6 +9,11 @@ export namespace LinkResponse {
         short: string
         target: string
         counter: number
+    }
+
+    export interface Get {
+        items: LinkEntity[],
+        paging: PaginationType
     }
     
 }
