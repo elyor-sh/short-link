@@ -1,27 +1,19 @@
 import { Module } from '@nestjs/common';
 import {ConfigModule} from "@nestjs/config";
-import {TypeOrmModule} from "@nestjs/typeorm";
+import {MongooseModule} from "@nestjs/mongoose";
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
-import * as path from 'path'
+import { LinkModule } from './link/link.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: `.env.${process.env.NODE_ENV}`
     }),
-    TypeOrmModule.forRoot({
-      name: 'default',
-      type: 'mongodb',
-      url: process.env.MONGO_DB_URI,
-      database: process.env.MONGO_DB_NAME,
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      autoLoadEntities: true,
-      entities: [path.join(__dirname, '**/*.entity{.ts,.js}')]
-   }),
+    MongooseModule.forRoot(process.env.MONGO_DB_URI),
     AuthModule,
     UserModule,
+    LinkModule,
   ],
   controllers: [],
   providers: [],
