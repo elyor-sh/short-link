@@ -1,4 +1,4 @@
-import {Controller, Get, HttpException, HttpStatus, Param, Post, Query, Res} from '@nestjs/common';
+import {Controller, Get, Param, Post, Query, Res} from '@nestjs/common';
 import {ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
 import {LinkService} from "./link.service";
 import {Link} from "./link.entity";
@@ -19,19 +19,14 @@ export class LinkController {
     @ApiResponse({status: 200, type: ApiResponseLinkSwagger})
     @Get()
     getAll(@Query() pagination: LinkPaginationDto) {
-        return this.linkService.getAll(Number(pagination.page || 1), Number(pagination.limit || 20))
+
+        return this.linkService.getAll(pagination)
     }
 
     @ApiOperation({summary: 'Создание ссылок'})
     @ApiResponse({status: 201, type: Link})
     @Post()
     create(@Query('link') link: string, @UserDecorator() user: User) {
-
-        const urlRegex =/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-
-        if(!urlRegex.test(link)){
-            throw new HttpException({message: 'Невалидная ссылка'}, HttpStatus.BAD_REQUEST)
-        }
 
         return this.linkService.create(link, user._id)
     }
