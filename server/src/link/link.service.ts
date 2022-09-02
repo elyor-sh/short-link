@@ -3,6 +3,7 @@ import {InjectModel} from "@nestjs/mongoose";
 import {Model, ObjectId} from "mongoose";
 import {Link, LinkDocument} from "./link.entity";
 import {v4} from 'uuid'
+import ShortUniqueId from 'short-unique-id'
 
 @Injectable()
 export class LinkService {
@@ -15,7 +16,7 @@ export class LinkService {
         const totalCount = await this.linkRepository.count()
         const totalPage = Math.ceil(totalCount / limit)
 
-        const linkQuery = this.linkRepository.find().skip((page - 1) * limit).limit(limit)
+        const linkQuery = this.linkRepository.find().skip((page < 1 ? 1 : page - 1) * limit).limit(limit < 1 ? 20 : limit)
 
         return {
             paging: {
@@ -31,9 +32,10 @@ export class LinkService {
     }
 
     async create(link: string, userId: ObjectId): Promise<Link> {
+        const uid = new ShortUniqueId({length: 9})
         const params = {
             target: link,
-            short: v4(),
+            short: uid(),
             owner: userId,
             counter: 0
         }
