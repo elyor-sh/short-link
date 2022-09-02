@@ -1,25 +1,26 @@
 import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
-import {InjectRepository} from "@nestjs/typeorm";
-import {User} from "./user.entity";
+import {User, UserDocument} from "./user.entity";
 import {CreateUserDto} from "./dto/user.create.dto";
-import {Repository} from "typeorm";
+import {InjectModel} from "@nestjs/mongoose";
+import {Model} from "mongoose";
 
 @Injectable()
 export class UserService {
-    constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
+    constructor(@InjectModel('user') private userRepository: Model<UserDocument>) {}
 
-    async createUser(dto: CreateUserDto){
-        const candidate = await this.getUserByEmail(dto.email)
+    async createUser(dto: CreateUserDto): Promise<User>{
+        const candidate = await this.getUserByUserName(dto.username)
 
         if(candidate) {
-            throw new HttpException('Пользователь с таким email уже существует', HttpStatus.BAD_REQUEST)
+            throw new HttpException('Пользователь с таким username уже существует', HttpStatus.BAD_REQUEST)
         }
 
-        return this.userRepository.save(dto)
+        const user = new this.userRepository(dto)
+        return user.save()
     }
 
-    async getUserByEmail (email: string){
-        return this.userRepository.findOne({where: {email}})
+    async getUserByUserName (username: string){
+        return this.userRepository.findOne({username})
     }
 
 }

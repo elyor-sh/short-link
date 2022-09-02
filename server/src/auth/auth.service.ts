@@ -14,20 +14,21 @@ export class AuthService {
     }
 
     // Регистрация
-    async registration(userDto: CreateUserDto) {
-        const candidate = await this.usersService.getUserByEmail(userDto.email)
+    async registration(userDto: CreateUserDto): Promise<Omit<User, 'password'>> {
+        const candidate = await this.usersService.getUserByUserName(userDto.username)
 
         if (candidate) {
-            throw new HttpException('Пользователь с таким email уже существует', HttpStatus.BAD_REQUEST)
+            throw new HttpException('Пользователь с таким username уже существует', HttpStatus.BAD_REQUEST)
         }
 
         const hashPassword = await bcrypt.hash(userDto.password, 7)
 
         const user = await this.usersService.createUser({...userDto, password: hashPassword})
 
-        delete user.password
-
-        return user
+        return {
+            _id: user._id,
+            username: user.username
+        }
     }
 
     // Авторизация
@@ -37,7 +38,7 @@ export class AuthService {
 
     // Генерация токена
     private async generateToken(user: User) {
-        const payload = {email: user.email, username: user.username, id: user.id}
+        const payload = { username: user.username, _id: user._id}
         return {
             token: this.jwtService.sign(payload)
         }
@@ -46,9 +47,7 @@ export class AuthService {
     // Валидация пользователя
     private async validateUser(userDto: CreateUserDto) {
 
-        const user = await this.usersService.getUserByEmail(userDto.email)
-
-        console.log(user)
+        const user = await this.usersService.getUserByUserName(userDto.username)
 
         const isEqualPass = await bcrypt.compare(userDto.password, user.password)
 
@@ -57,12 +56,12 @@ export class AuthService {
             const newUser = JSON.parse(JSON.stringify(user))
             delete newUser.password
             return {
-                user: newUser,
-                token: token.token
+                access_token: token.token,
+                token_type: 'bearer'
             }
         }
 
-        throw new UnauthorizedException('Wrong email or password')
+        throw new UnauthorizedException('Неправильный логин или пароль')
     }
 
 }
