@@ -1,4 +1,3 @@
-import {stringify} from 'query-string'
 import {httpRequest, httpRequestAuth} from "./axios";
 import {AuthRequest} from "../types/request/auth.request";
 import {AuthResponse} from "../types/response/auth.response";
@@ -11,11 +10,11 @@ import {LinkResponse} from "../types/response/link.response";
 
 export const apiAuthRegister = (
     params: AuthRequest.Register
-): Response<AuthResponse.Register> => httpRequestAuth.post(`/register?${stringify(params)}`)
+): Response<AuthResponse.Register> => httpRequestAuth.post(`/auth/register`, params)
 
 export const apiAuthLogin = (
     params: AuthRequest.Login
-): Response<AuthResponse.Login> => httpRequestAuth.post('/login', params)
+): Response<AuthResponse.Login> => httpRequestAuth.post('/auth/login', params)
 
 
 // ==============    LINK    ===============
@@ -26,7 +25,7 @@ export const apiLinkCreate = (
 
 export const apiLinksGet = (
     params: LinkRequest.Get
-): Response<LinkResponse.Create> => httpRequest.get('/statistics', {params})
+): Response<LinkResponse.Get> => httpRequest.get('/squeeze', {params})
 
 export const apiLinkRedirect = (
     key: string
