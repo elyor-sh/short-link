@@ -2,8 +2,9 @@ import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {InjectModel} from "@nestjs/mongoose";
 import {Model, ObjectId} from "mongoose";
 import {Link, LinkDocument} from "./link.entity";
-import {v4} from 'uuid'
 import ShortUniqueId from 'short-unique-id'
+import {LinkSortDto} from "./dto/link.sort.dto";
+import {LinkPaginationDto} from "./dto/link.pagination.dto";
 
 @Injectable()
 export class LinkService {
@@ -11,12 +12,33 @@ export class LinkService {
     constructor(@InjectModel('link') private readonly linkRepository: Model<LinkDocument>) {
     }
 
-    async getAll(page: number = 1, limit: number = 20) {
+    async getAll(pagination: LinkPaginationDto) {
+
+        const page = pagination.page || 1
+        const limit = pagination.limit || 20
+
+        let sort: LinkSortDto = {}
+
+        const sortObj = {...pagination}
+
+        delete sortObj.limit
+        delete sortObj.page
+
+        Object.keys(sortObj).forEach(key => {
+            sort = {
+                ...sort,
+                [key]: sortObj[key]
+            }
+        })
 
         const totalCount = await this.linkRepository.count()
         const totalPage = Math.ceil(totalCount / limit)
 
-        const linkQuery = this.linkRepository.find().skip((page < 1 ? 1 : page - 1) * limit).limit(limit < 1 ? 20 : limit)
+        const linkQuery = this.linkRepository
+            .find()
+            .sort({...sort})
+            .skip((page < 1 ? 1 : page - 1) * limit)
+            .limit(limit < 1 ? 20 : limit)
 
         return {
             paging: {
@@ -32,6 +54,13 @@ export class LinkService {
     }
 
     async create(link: string, userId: ObjectId): Promise<Link> {
+
+        const urlRegex =/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+
+        if(!urlRegex.test(link)){
+            throw new HttpException({message: 'Невалидная ссылка'}, HttpStatus.BAD_REQUEST)
+        }
+
         const uid = new ShortUniqueId({length: 9})
         const params = {
             target: link,
