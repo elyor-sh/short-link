@@ -53,6 +53,7 @@ export const TablePro: React.FC<TableProProps> = memo((
                                             <TableCell
                                                 key={cell.field}
                                                 align={cell.align || 'left'}
+                                                sx={{whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '300px'}}
                                             >
                                                 {drawCell(row, cell)}
                                             </TableCell>

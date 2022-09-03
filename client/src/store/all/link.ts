@@ -48,6 +48,11 @@ export class LinkStore {
         }
     }
 
+    refresh () {
+        this.filter = {}
+        this.sort = {}
+    }
+
     handleFilters (filter: Required<LinkRequest.Filter>) {
 
         let isEmpty = true

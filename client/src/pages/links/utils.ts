@@ -11,13 +11,24 @@ export const linksTableHeadCells: ITableHeadCells[] = [
 ]
 
 export const linksFilterFields: FilterProps[] = [
-    {name: 'filterBy__id', type: 'input', inputType: 'text', label: 'ID'},
-    {name: 'filterBy_short', type: 'input', inputType: 'text', label: 'Короткая ссылка'},
+    {
+        name: 'filterBy_owner',
+        type: 'select',
+        inputType: 'text',
+        label: 'Владелец ссылки',
+        options: [
+            {label: 'Все', value: 'all'},
+            {label: 'Свои', value: 'own'},
+        ]
+    },
+    {name: 'filterBy__id', type: 'input', inputType: 'text', label: 'ID', width: '150px'},
+    {name: 'filterBy_short', type: 'input', inputType: 'text', label: 'Короткая ссылка', width: '150px'},
     {name: 'filterBy_target', type: 'input', inputType: 'text', label: 'Исходная ссылка'},
-    {name: 'filterBy_counter', type: 'input', inputType: 'number', label: 'Количество переходов'},
+    {name: 'filterBy_counter', type: 'input', inputType: 'number', label: 'Количество переходов', width: '200px'},
 ]
 
 export const linksInitialFilterState: Required<LinkRequest.Filter> = {
+    filterBy_owner: '',
     filterBy__id: '',
     filterBy_counter: '',
     filterBy_short: '',
