@@ -68,7 +68,7 @@ export class LinkService {
             throw new HttpException({message: 'Невалидная ссылка'}, HttpStatus.BAD_REQUEST)
         }
 
-        const uid = new ShortUniqueId({length: 9})
+        const uid = new ShortUniqueId({length: 6})
         const params = {
             target: link,
             short: uid(),
