@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom'
 import {Avatar, Box, Button, Grid, Paper, TextField, Typography} from "@mui/material";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
@@ -9,6 +10,8 @@ interface AuthFormProps {
     password: string
     setUserName: (p: string) => void
     setPassword: (p: string) => void
+    href: string
+    linkTitle: string
 }
 
 const AuthForm: React.FC<AuthFormProps> = (
@@ -18,7 +21,9 @@ const AuthForm: React.FC<AuthFormProps> = (
         username,
         password,
         setPassword,
-        setUserName
+        setUserName,
+        href,
+        linkTitle
     }) => {
 
     const handleKeyPress = (e: React.KeyboardEvent<HTMLFormElement>) => {
@@ -91,6 +96,9 @@ const AuthForm: React.FC<AuthFormProps> = (
                             {title}
                         </Button>
                     </Box>
+                    <Grid container justifyContent='flex-end'>
+                        <Link to={href}>{linkTitle}</Link>
+                    </Grid>
                 </Box>
             </Grid>
         </>

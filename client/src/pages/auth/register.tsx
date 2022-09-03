@@ -25,6 +25,8 @@ const RegisterPage = observer(() => {
                 password={registerStore.password}
                 setUserName={registerStore.setUserName}
                 setPassword={registerStore.setPassword}
+                href='/login'
+                linkTitle='Логин'
             />
         </>
     );

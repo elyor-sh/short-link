@@ -13,7 +13,11 @@ const LoginPage = observer(() => {
 
     const handleLogin = async () => {
         authService.login(loginStore.username, loginStore.password)
-            .then(() => navigate('/links'))
+            .then(() => {
+                loginStore.setUserName('')
+                loginStore.setPassword('')
+                navigate('/links')
+            })
     }
 
     return (
@@ -25,6 +29,8 @@ const LoginPage = observer(() => {
                 password={loginStore.password}
                 setUserName={loginStore.setUserName}
                 setPassword={loginStore.setPassword}
+                href='/register'
+                linkTitle='Регистрация'
             />
         </>
     );
