@@ -48,6 +48,15 @@ const LinkCreatePage = observer(() => {
             <Grid item>
                 <Button
                     variant="contained"
+                    sx={{height: '40px', background: '#bebebe', '&:hover' : {background: '#fa7070'}}}
+                    onClick={() => navigate(-1)}
+                >
+                    Отмена
+                </Button>
+            </Grid>
+            <Grid item>
+                <Button
+                    variant="contained"
                     sx={{height: '40px'}}
                     onClick={handleSave}
                 >

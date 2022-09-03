@@ -1,5 +1,5 @@
-import {RegisterStore} from "./all/register";
 import React from "react";
+import {RegisterStore} from "./all/register";
 import {LoginStore} from "./all/login";
 import {CurrentUserStore} from "./all/current-user";
 import {LinkStore} from "./all/link";
