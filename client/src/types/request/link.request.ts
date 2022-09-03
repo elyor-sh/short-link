@@ -3,8 +3,6 @@ import {BaseQuery} from "./base.requests";
 
 export namespace LinkRequest {
 
-
-    
     export interface Create {
         link: string
     }
@@ -16,9 +14,15 @@ export namespace LinkRequest {
         sortBy_counter?: 1 | -1
     }
 
-    interface GetQuery extends BaseQuery {}
-    interface GetSort extends GetQuery {}
+    export interface Filter {
+        filterBy__id?: string
+        filterBy_target?: string
+        filterBy_short?: string
+        filterBy_counter?: number | string
+    }
 
-    export interface Get extends GetSort {}
+    interface GetQuery extends BaseQuery {}
+
+    export type Get = GetQuery & Filter & Sort
     
 }

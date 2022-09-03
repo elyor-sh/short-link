@@ -13,7 +13,7 @@ export const drawCell = (row: any, cell: ITableHeadCells) => {
         case "text":
             return row[cell.field]
         case "link":
-            return <a href={row[cell.field]} rel="noreferrer" target="_blank">{row[cell.field]}</a>
+            return <span>{row[cell.field]}</span>
         case "short-link":
             return <ShortLink href={REDIRECT_URI + row[cell.field]} rel="noreferrer" target="_blank">{row[cell.field]}</ShortLink>
         default:

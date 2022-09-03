@@ -6,9 +6,7 @@ class LinkService {
     async getAll () {
         try {
 
-            const {page, limit, sort} = linkStore
-
-            const response = await apiLinksGet({page, limit, ...sort})
+            const response = await apiLinksGet(linkStore.queryParams)
 
             linkStore.setTotalCount(response.data.paging.totalCount)
             linkStore.setTotalPage(response.data.paging.totalPage)

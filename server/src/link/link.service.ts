@@ -20,7 +20,7 @@ export class LinkService {
         let filter = {}
 
         Object.keys(query).forEach(key => {
-            if(key.includes('sortBy_') && (query[key] === -1 || query[key] === 1)){
+            if(key.includes('sortBy_') && (Number(query[key]) === -1 || Number(query[key]) === 1)){
                 sort = {
                     ...sort,
                     [key.replace('sortBy_', '')]: query[key]

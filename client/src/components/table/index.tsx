@@ -1,4 +1,4 @@
-import React from "react";
+import React, {memo} from "react";
 import {ITableHeadCells} from "./types";
 import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 import {drawCell} from "./drawCell";
@@ -15,7 +15,7 @@ interface TableProProps {
     setPage: (p: number) => void
 }
 
-export const TablePro: React.FC<TableProProps> = (
+export const TablePro: React.FC<TableProProps> = memo((
     {
         headCells,
         rows,
@@ -73,4 +73,4 @@ export const TablePro: React.FC<TableProProps> = (
             </TableContainer>
         </>
     );
-}
+})
