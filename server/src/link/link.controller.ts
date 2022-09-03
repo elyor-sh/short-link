@@ -19,9 +19,9 @@ export class LinkController {
     @ApiOperation({summary: 'Получение ссылок'})
     @ApiResponse({status: 200, type: ApiResponseLinkSwagger})
     @Get('/squeeze')
-    getAll(@Query() query: LinkQueryDto) {
+    getAll(@Query() query: LinkQueryDto, @UserDecorator() user: User) {
 
-        return this.linkService.getAll(query)
+        return this.linkService.getAll(query, user)
     }
 
     @ApiOperation({summary: 'Создание ссылок'})

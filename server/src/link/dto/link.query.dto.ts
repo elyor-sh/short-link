@@ -33,4 +33,7 @@ export class LinkQueryDto {
     @ApiProperty({example: 1, description: 'Фильтр по переходу по ссылке', required: false})
     filterBy_counter?: number
 
+    @ApiProperty({enum: ['all', 'own'], description: 'Выбрать свои либо все ссылки', required: false})
+    filterBy_owner: 'all' | 'own'
+
 }

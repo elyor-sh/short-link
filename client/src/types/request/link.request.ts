@@ -15,6 +15,7 @@ export namespace LinkRequest {
     }
 
     export interface Filter {
+        filterBy_owner?: string
         filterBy__id?: string
         filterBy_target?: string
         filterBy_short?: string

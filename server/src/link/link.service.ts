@@ -4,6 +4,7 @@ import {Model, ObjectId} from "mongoose";
 import {Link, LinkDocument} from "./link.entity";
 import ShortUniqueId from 'short-unique-id'
 import {LinkQueryDto} from "./dto/link.query.dto";
+import {User} from "../user/user.entity";
 
 @Injectable()
 export class LinkService {
@@ -11,13 +12,14 @@ export class LinkService {
     constructor(@InjectModel('link') private readonly linkRepository: Model<LinkDocument>) {
     }
 
-    async getAll(query: LinkQueryDto) {
+    async getAll(query: LinkQueryDto, user: User) {
 
         const page = query.page || 1
         const limit = query.limit || 20
 
         let sort = {}
         let filter = {}
+        let own = {}
 
         Object.keys(query).forEach(key => {
             if(key.includes('sortBy_') && (Number(query[key]) === -1 || Number(query[key]) === 1)){
@@ -29,6 +31,18 @@ export class LinkService {
 
             if(key.includes('filterBy_')){
 
+                if(key === 'filterBy_owner' ){
+                    if(query[key] === 'all'){
+                       return
+                    }else {
+                        own = {
+                            owner: user._id
+                        }
+
+                        return
+                    }
+                }
+
                 const isNum = key === 'filterBy_counter'
 
                 filter = {
@@ -38,11 +52,11 @@ export class LinkService {
             }
         })
 
-        const totalCount = await this.linkRepository.count()
+        const totalCount = own['owner'] ? await this.linkRepository.find({...own}).count() : await this.linkRepository.count()
         const totalPage = Math.ceil(totalCount / limit)
 
         const linkQuery = this.linkRepository
-            .find({...filter})
+            .find({...filter, ...own})
             .sort({...sort})
             .skip((page < 1 ? 1 : page - 1) * limit)
             .limit(limit < 1 ? 20 : limit)

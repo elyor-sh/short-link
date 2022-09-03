@@ -37,7 +37,13 @@ const LinksPage = observer(() => {
             navigate('?' + linkStore.query)
             await linkService.getAll()
         })()
-    }, [linkStore.page, linkStore.limit, linkStore.sort, linkStore.query])
+    }, [linkStore.query])
+
+    useEffect(() => {
+        return () => {
+            linkStore.refresh()
+        }
+    }, [])
 
     return (
         <>
