@@ -1,6 +1,7 @@
 import {makeAutoObservable} from "mobx";
 import {LinkEntity} from "../../entities/link.entity";
 import {LinkRequest} from "../../types/request/link.request";
+import {stringify} from "query-string";
 
 export class LinkStore {
 
@@ -10,6 +11,7 @@ export class LinkStore {
     totalCount: number = 1
     totalPage: number = 1
     sort: LinkRequest.Sort = {}
+    filter: LinkRequest.Filter = {}
 
     constructor() {
         makeAutoObservable(this, {}, {autoBind: true})
@@ -37,5 +39,55 @@ export class LinkStore {
 
     setSort (sort: LinkRequest.Sort) {
         this.sort = sort
+    }
+
+    setFilter (filter: LinkRequest.Filter) {
+        this.filter = {
+            ...this.filter,
+            ...filter
+        }
+    }
+
+    handleFilters (filter: Required<LinkRequest.Filter>) {
+
+        let isEmpty = true
+
+        Object.keys(filter).forEach((fil) => {
+            if(filter[fil as keyof typeof filter]){
+                isEmpty = false
+                this.filter = {
+                    ...this.filter,
+                    [fil]: filter[fil as keyof typeof filter]
+                }
+            }
+        })
+
+        if(isEmpty){
+            this.filter = {}
+        }
+    }
+
+    handleClearFilters () {
+        this.filter = {}
+    }
+
+    get query () {
+        return stringify(
+            {
+                page: this.page,
+                limit: this.limit,
+                ...this.sort,
+                ...this.filter
+            }
+        )
+    }
+
+    get queryParams (): LinkRequest.Get {
+        return {
+            page: this.page,
+            limit: this.limit,
+            ...this.sort,
+            ...this.filter
+        }
     }
 }
