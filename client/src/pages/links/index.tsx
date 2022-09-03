@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo} from 'react';
 import { useNavigate} from "react-router-dom";
 import {observer} from "mobx-react-lite";
-import {Container} from "@mui/material";
+import {Button,  Grid} from "@mui/material";
 import {useStore} from "../../hooks/useStore";
 import {linkService} from "../../services/link.service";
 import {linksFilterFields, linksInitialFilterState, linksTableHeadCells} from "./utils";
@@ -41,7 +41,14 @@ const LinksPage = observer(() => {
 
     return (
         <>
-            <Container>
+                <Grid container justifyContent="flex-end">
+                    <Button
+                        variant="contained"
+                        onClick={() => navigate('/links/create')}
+                    >
+                        Создать
+                    </Button>
+                </Grid>
                 <Filter
                     filters={filterFields}
                     initialState={initialFilterState}
@@ -57,7 +64,6 @@ const LinksPage = observer(() => {
                     setRowsPerPage={linkStore.setLimit}
                     totalCount={linkStore.totalCount}
                 />
-            </Container>
         </>
     );
 });

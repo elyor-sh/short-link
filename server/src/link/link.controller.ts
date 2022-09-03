@@ -1,4 +1,4 @@
-import {Controller, Get, Param, Post, Query, Res} from '@nestjs/common';
+import {Body, Controller, Get, Param, Post, Query, Res} from '@nestjs/common';
 import {ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
 import {LinkService} from "./link.service";
 import {Link} from "./link.entity";
@@ -8,16 +8,17 @@ import {Response} from "express";
 import {Public} from "../auth/public.decorator";
 import {ApiResponseLinkSwagger} from "../utils/swagger/link.swagger";
 import {LinkQueryDto} from "./dto/link.query.dto";
+import {LinkCreateDto} from "./dto/link.create.dto";
 
 @ApiTags('Ссылки')
-@Controller('squeeze')
+@Controller('')
 export class LinkController {
 
     constructor(private linkService: LinkService) {}
 
     @ApiOperation({summary: 'Получение ссылок'})
     @ApiResponse({status: 200, type: ApiResponseLinkSwagger})
-    @Get()
+    @Get('/squeeze')
     getAll(@Query() query: LinkQueryDto) {
 
         return this.linkService.getAll(query)
@@ -25,10 +26,10 @@ export class LinkController {
 
     @ApiOperation({summary: 'Создание ссылок'})
     @ApiResponse({status: 201, type: Link})
-    @Post()
-    create(@Query('link') link: string, @UserDecorator() user: User) {
+    @Post('/squeeze')
+    create(@Body() link: LinkCreateDto, @UserDecorator() user: User) {
 
-        return this.linkService.create(link, user._id)
+        return this.linkService.create(link.link, user._id)
     }
 
     @ApiOperation({summary: 'Получение ссылок'})
